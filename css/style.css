@@ -3,10 +3,6 @@ body{
     background-color: rgb(63, 60, 60);
 }
 
-body *{
-    border: 1px solid red;
-}
-
 @font-face{
     src: url("/fonts/EastBroadway\ CondensedBold.otf");
     font-family: 'Fonte-Genius';
@@ -44,15 +40,14 @@ body *{
     background-color: black;
 }
 
-#circulo-interno button {
-    all: unset;
-    text-align: center;
+#btn-iniciar{
+    width: 20%;
+    height: 20%;
     cursor: pointer;
 }
 
-#circulo-interno button img {
-    width: 20%;
-    height: auto;
+#btn-iniciar:active{
+    transform: scale(0.9);
 }
 
 .botao{
@@ -65,28 +60,28 @@ body *{
     border-top-left-radius: 100%;
     top: 4%;
     left: 4%;
-    background-color: rgb(74, 216, 74);
+    background-color: rgb(41, 102, 41);
 }
 
 .top-right{
     border-top-right-radius: 100%;
     top: 4%;
     right: 4%;
-    background-color: red;
+    background-color: rgb(146, 4, 4);
 }
 
 .bottom-left{
     border-bottom-left-radius: 100%;
     bottom: 4%;
     left: 4%;
-    background-color: yellow;
+    background-color: rgb(133, 133, 5);
 }
 
 .bottom-right{
     border-bottom-right-radius: 100%;
     bottom: 4%;
     right: 4%;
-    background-color: rgb(71, 140, 218);
+    background-color: rgb(34, 27, 131);
 }
 
 .rodape{
