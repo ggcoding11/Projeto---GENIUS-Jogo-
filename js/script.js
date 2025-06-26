@@ -25,7 +25,7 @@ function apagar(elemento) {
 }
 
 function iniciarFase(numAcessos, velocidade) {
-  
+
   
 }
 
