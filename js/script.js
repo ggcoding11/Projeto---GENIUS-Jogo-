@@ -3,10 +3,20 @@ const topLeft = document.querySelector(".top-left");
 const topRight = document.querySelector(".top-right");
 const bottomLeft = document.querySelector(".bottom-left");
 const bottomRight = document.querySelector(".bottom-right");
+const botoes = document.querySelectorAll(".botao");
+
+let numAcessos = 5;
+let velocidade = 300;
 
 botaoIniciar.addEventListener("click", () => {
   iniciarAnimacao();
+
+  iniciarFase(numAcessos, velocidade);
 });
+
+function iniciarFase(numAcessos, velocidade) {
+  acender(botoes[0]);
+}
 
 function acender(elemento) {
   elemento.classList.add("ligado");
