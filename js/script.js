@@ -1,27 +1,49 @@
-const botaoIniciar = document.querySelector("#btn-iniciar")
-const topLeft = document.querySelector(".top-left")
-const topRight = document.querySelector(".top-right")
-const bottomLeft = document.querySelector(".bottom-left")
-const bottomRight = document.querySelector(".bottom-right")
+const botaoIniciar = document.querySelector("#btn-iniciar");
+const topLeft = document.querySelector(".top-left");
+const topRight = document.querySelector(".top-right");
+const bottomLeft = document.querySelector(".bottom-left");
+const bottomRight = document.querySelector(".bottom-right");
 
 botaoIniciar.addEventListener("click", () => {
-    topLeft.classList.add("ligado")
-    topRight.classList.add("ligado")
-    bottomLeft.classList.add("ligado")
-    bottomRight.classList.add("ligado")
+  iniciarAnimacao();
+});
 
-    setInterval(() => {
-        setTimeout(() => {
-            topLeft.classList.add("ligado")
-            topRight.classList.add("ligado")
-            bottomLeft.classList.add("ligado")
-            bottomRight.classList.add("ligado")
-        }, 200)
+function acender(elemento) {
+  elemento.classList.add("ligado");
+}
 
-        topLeft.classList.remove("ligado")
-        topRight.classList.remove("ligado")
-        bottomLeft.classList.remove("ligado")
-        bottomRight.classList.remove("ligado")
-    }, 400)
+function apagar(elemento) {
+  elemento.classList.remove("ligado");
+}
 
-})
+function iniciarAnimacao() {
+  acender(topLeft);
+  acender(topRight);
+  acender(bottomLeft);
+  acender(bottomRight);
+
+  setTimeout(() => {
+    apagar(topLeft);
+    apagar(topRight);
+    apagar(bottomLeft);
+    apagar(bottomRight);
+  }, 100);
+
+  let intervalo = setInterval(() => {
+    acender(topLeft);
+    acender(topRight);
+    acender(bottomLeft);
+    acender(bottomRight);
+
+    setTimeout(() => {
+      apagar(topLeft);
+      apagar(topRight);
+      apagar(bottomLeft);
+      apagar(bottomRight);
+    }, 100);
+  }, 200);
+
+  setTimeout(() => {
+    clearInterval(intervalo);
+  }, 1000);
+}

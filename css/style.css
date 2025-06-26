@@ -60,32 +60,32 @@ body{
     border-top-left-radius: 100%;
     top: 4%;
     left: 4%;
-    background-color: rgba(34, 83, 34, 0.644);
+    background-color: rgba(64, 151, 64, 0.616);
 }
 
 .top-right{
     border-top-right-radius: 100%;
     top: 4%;
     right: 4%;
-    background-color: rgb(106, 4, 4);
+    background-color: rgba(173, 5, 5, 0.671);
 }
 
 .bottom-left{
     border-bottom-left-radius: 100%;
     bottom: 4%;
     left: 4%;
-    background-color: rgba(133, 133, 5, 0.685);
+    background-color: rgba(185, 185, 8, 0.651);
 }
 
 .bottom-right{
     border-bottom-right-radius: 100%;
     bottom: 4%;
     right: 4%;
-    background-color: rgba(34, 27, 131, 0.692);
+    background-color: rgba(40, 99, 187, 0.575);
 }
 
 .ligado{
-    filter: brightness(2.5);
+    filter: brightness(1.5);
 }
 
 .rodape{
