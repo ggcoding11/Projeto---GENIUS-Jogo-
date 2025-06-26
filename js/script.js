@@ -10,8 +10,8 @@ let velocidade = 300;
 
 botaoIniciar.addEventListener("click", () => {
   iniciarAnimacao();
-  
-  setTimeout(()=>{
+
+  setTimeout(() => {
     iniciarFase(numAcessos, velocidade);
   }, 3000)
 });
@@ -25,10 +25,8 @@ function apagar(elemento) {
 }
 
 function iniciarFase(numAcessos, velocidade) {
+
   
-  
-  
-  acender(botoes[0]);
 }
 
 function iniciarAnimacao() {
