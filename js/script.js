@@ -5,6 +5,8 @@ const bottomLeft = document.querySelector(".bottom-left");
 const bottomRight = document.querySelector(".bottom-right");
 const botoes = document.querySelectorAll(".botao");
 
+let podeJogar = false;
+
 let numAcessos = 5;
 let velocidade = 500;
 
@@ -14,11 +16,56 @@ let botoesPlayer = [];
 botaoIniciar.addEventListener("click", () => {
   iniciarAnimacao();
 
-  //Depois de 2 segundos o jogo começa
-
   setTimeout(() => {
     iniciarFase(numAcessos, velocidade);
   }, 2000);
+});
+
+botoes.forEach((botao, index) => {
+  botao.addEventListener("click", () => {
+    console.log(index);
+
+    if (!podeJogar) {
+      return;
+    }
+
+    botoesPlayer.push(index);
+
+    let cont = botoesPlayer.length - 1;
+
+    if (botoesPlayer[cont] != botoesCPU[cont]) {
+      iniciarAnimacaoErro();
+
+      retirarClicavel();
+
+      reiniciarParametros();
+
+      botoesPlayer = [];
+      botoesCPU = [];
+    } else {
+      acender(botao);
+
+      setTimeout(() => {
+        apagar(botao);
+      }, 190);
+
+      if (verficarVitoria(botoesCPU, botoesPlayer) == true) {
+        retirarClicavel();
+
+        iniciarAnimacao();
+
+        numAcessos += 1;
+        velocidade += 50;
+
+        botoesPlayer = [];
+        botoesCPU = [];
+
+        setTimeout(() => {
+          iniciarFase(numAcessos, velocidade);
+        }, 2000);
+      }
+    }
+  });
 });
 
 function acender(elemento) {
@@ -27,14 +74,6 @@ function acender(elemento) {
 
 function apagar(elemento) {
   elemento.classList.remove("ligado");
-}
-
-function esperar(ms) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, ms);
-  });
 }
 
 async function iniciarFase(numAcessos, velocidade) {
@@ -56,35 +95,22 @@ async function iniciarFase(numAcessos, velocidade) {
     cont++;
   }
 
+  console.log(botoesCPU);
+
   iniciarVezPlayer();
 }
 
-function iniciarVezPlayer() {
-  let cont = 0;
-
-  botoes.forEach((botao, index) => {
-    tornarClicavel();
-
-    botao.addEventListener("click", () => {
-      botoesPlayer.push(index);
-
-      if (botoesPlayer[cont] != botoesCPU[cont]) {
-        iniciarAnimacaoErro();
-
-        retirarClicavel();
-
-        return;
-      }
-
-      acender(botao);
-
-      setTimeout(() => {
-        apagar(botao);
-      }, 190);
-
-      cont++;
-    });
+function esperar(ms) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
   });
+}
+
+function iniciarVezPlayer() {
+  tornarClicavel();
+  podeJogar = true;
 }
 
 function tornarClicavel() {
@@ -99,65 +125,57 @@ function retirarClicavel() {
   });
 }
 
-function iniciarAnimacao() {
-  acender(topLeft);
-  acender(topRight);
-  acender(bottomLeft);
-  acender(bottomRight);
-
-  setTimeout(() => {
-    apagar(topLeft);
-    apagar(topRight);
-    apagar(bottomLeft);
-    apagar(bottomRight);
-  }, 100);
-
-  let intervalo = setInterval(() => {
+async function iniciarAnimacao() {
+  for (let i = 0; i < 6; i++) {
     acender(topLeft);
     acender(topRight);
     acender(bottomLeft);
     acender(bottomRight);
 
-    setTimeout(() => {
-      apagar(topLeft);
-      apagar(topRight);
-      apagar(bottomLeft);
-      apagar(bottomRight);
-    }, 100);
-  }, 200);
+    await esperar(100);
 
-  setTimeout(() => {
-    clearInterval(intervalo);
-  }, 1000);
+    apagar(topLeft);
+    apagar(topRight);
+    apagar(bottomLeft);
+    apagar(bottomRight);
+
+    await esperar(100);
+  }
 }
 
-function iniciarAnimacaoErro() {
-  acender(topLeft);
-  acender(topRight);
-  acender(bottomLeft);
-  acender(bottomRight);
-
-  setTimeout(() => {
-    apagar(topLeft);
-    apagar(topRight);
-    apagar(bottomLeft);
-    apagar(bottomRight);
-  }, 400);
-
-  setTimeout(() => {
+async function iniciarAnimacaoErro() {
+  for (let i = 0; i < 2; i++) {
     acender(topLeft);
     acender(topRight);
     acender(bottomLeft);
     acender(bottomRight);
-  }, 800);
 
-  setTimeout(() => {
+    await esperar(400);
+
     apagar(topLeft);
     apagar(topRight);
     apagar(bottomLeft);
     apagar(bottomRight);
-  }, 1200);
 
+    await esperar(400);
+  }
+}
 
+function verficarVitoria(array1, array2) {
+  if (array1.length != array2.length) {
+    return false;
+  }
 
+  for (let i = 0; i < array1.length; i++) {
+    if (array1[i] != array2[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function reiniciarParametros() {
+  numAcessos = 5;
+  velocidade = 300;
 }

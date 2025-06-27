@@ -74,18 +74,18 @@ body{
     border-bottom-left-radius: 100%;
     bottom: 4%;
     left: 4%;
-    background-color: rgba(185, 185, 8, 0.651);
+    background-color: rgba(128, 128, 7, 0.651);
 }
 
 .bottom-right{
     border-bottom-right-radius: 100%;
     bottom: 4%;
     right: 4%;
-    background-color: rgba(40, 99, 187, 0.575);
+    background-color: rgba(29, 72, 136, 0.575);
 }
 
 .ligado{
-    filter: brightness(2);
+    filter: brightness(2.8);
 }
 
 .clicavel{
