@@ -88,6 +88,10 @@ body{
     filter: brightness(2);
 }
 
+.clicavel{
+    cursor: pointer;
+}
+
 .rodape{
     font-size: 2em;
     color: white;
