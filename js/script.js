@@ -19,9 +19,23 @@ botaoIniciar.addEventListener("click", () => {
   iniciarAnimacao();
 
   setTimeout(() => {
-    iniciarVezCPU(numAcessos, velocidade);
+    iniciarRodada(numAcessos, velocidade);
   }, 2000);
 });
+
+function iniciarRodada(numAcessos, velocidade) {
+  gerarSequenciaCPU(); //Gerei os que serão acessos
+
+  let qntdAtual = 1;
+
+  while (qntdAtual <= botoesCPU.length) {
+    iniciarVezCPU(qntdAtual);
+
+    iniciarVezPlayer();
+
+    qntdAtual++;
+  }
+}
 
 function esperar(ms) {
   return new Promise((resolve) => {
@@ -39,14 +53,10 @@ function apagar(elemento) {
   elemento.classList.remove("ligado");
 }
 
-async function iniciarVezCPU(numAcessos, velocidade) {
-  let cont = 0;
-
-  while (cont < numAcessos) {
-    let index = Math.floor(Math.random() * 4);
-
-    botoesCPU.push(index);
-
+async function iniciarVezCPU(qntdAtual) {
+  for (let i = 0; i < qntdAtual; i++) {
+    let index = botoesCPU[i];
+    
     acender(botoes[index]);
 
     await esperar(velocidade);
@@ -54,13 +64,15 @@ async function iniciarVezCPU(numAcessos, velocidade) {
     apagar(botoes[index]);
 
     await esperar(velocidade);
-
-    cont++;
   }
+}
 
-  console.log(botoesCPU);
+function gerarSequenciaCPU() {
+  for (let i = 0; i < numAcessos; i++) {
+    let index = Math.floor(Math.random() * 4);
 
-  iniciarVezPlayer();
+    botoesCPU.push(index);
+  }
 }
 
 function iniciarVezPlayer() {
@@ -70,7 +82,6 @@ function iniciarVezPlayer() {
 
 botoes.forEach((botao, index) => {
   botao.addEventListener("click", () => {
-    console.log(index);
 
     if (!podeJogar) {
       return;
@@ -110,7 +121,7 @@ botoes.forEach((botao, index) => {
         botoesCPU = [];
 
         setTimeout(() => {
-          iniciarVezCPU(numAcessos, velocidade);
+          iniciarRodada(numAcessos, velocidade);
         }, 2000);
       }
     }
