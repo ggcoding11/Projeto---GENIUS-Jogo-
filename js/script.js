@@ -13,60 +13,23 @@ let velocidade = 500;
 let botoesCPU = [];
 let botoesPlayer = [];
 
+//Início do jogo aqui
+
 botaoIniciar.addEventListener("click", () => {
   iniciarAnimacao();
 
   setTimeout(() => {
-    iniciarFase(numAcessos, velocidade);
+    iniciarVezCPU(numAcessos, velocidade);
   }, 2000);
 });
 
-botoes.forEach((botao, index) => {
-  botao.addEventListener("click", () => {
-    console.log(index);
-
-    if (!podeJogar) {
-      return;
-    }
-
-    botoesPlayer.push(index);
-
-    let cont = botoesPlayer.length - 1;
-
-    if (botoesPlayer[cont] != botoesCPU[cont]) {
-      iniciarAnimacaoErro();
-
-      retirarClicavel();
-
-      reiniciarParametros();
-
-      botoesPlayer = [];
-      botoesCPU = [];
-    } else {
-      acender(botao);
-
-      setTimeout(() => {
-        apagar(botao);
-      }, 190);
-
-      if (verficarVitoria(botoesCPU, botoesPlayer) == true) {
-        retirarClicavel();
-
-        iniciarAnimacao();
-
-        numAcessos += 1;
-        velocidade += 50;
-
-        botoesPlayer = [];
-        botoesCPU = [];
-
-        setTimeout(() => {
-          iniciarFase(numAcessos, velocidade);
-        }, 2000);
-      }
-    }
+function esperar(ms) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
   });
-});
+}
 
 function acender(elemento) {
   elemento.classList.add("ligado");
@@ -76,7 +39,7 @@ function apagar(elemento) {
   elemento.classList.remove("ligado");
 }
 
-async function iniciarFase(numAcessos, velocidade) {
+async function iniciarVezCPU(numAcessos, velocidade) {
   let cont = 0;
 
   while (cont < numAcessos) {
@@ -100,18 +63,59 @@ async function iniciarFase(numAcessos, velocidade) {
   iniciarVezPlayer();
 }
 
-function esperar(ms) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, ms);
-  });
-}
-
 function iniciarVezPlayer() {
   tornarClicavel();
   podeJogar = true;
 }
+
+botoes.forEach((botao, index) => {
+  botao.addEventListener("click", () => {
+    console.log(index);
+
+    if (!podeJogar) {
+      return;
+    }
+
+    botoesPlayer.push(index);
+
+    let cont = botoesPlayer.length - 1;
+
+    if (botoesPlayer[cont] != botoesCPU[cont]) {
+      iniciarAnimacaoErro();
+
+      retirarClicavel();
+
+      reiniciarParametros();
+
+      botoesPlayer = [];
+      botoesCPU = [];
+
+      //Fim de jogo aqui
+    } else {
+      acender(botao);
+
+      setTimeout(() => {
+        apagar(botao);
+      }, 190);
+
+      if (verficarVitoria(botoesCPU, botoesPlayer) == true) {
+        retirarClicavel();
+
+        iniciarAnimacao();
+
+        numAcessos += 1;
+        velocidade += 50;
+
+        botoesPlayer = [];
+        botoesCPU = [];
+
+        setTimeout(() => {
+          iniciarVezCPU(numAcessos, velocidade);
+        }, 2000);
+      }
+    }
+  });
+});
 
 function tornarClicavel() {
   botoes.forEach((botao) => {
