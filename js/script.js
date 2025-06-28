@@ -28,10 +28,49 @@ function iniciarRodada(numAcessos, velocidade) {
 
   let qntdAtual = 1;
 
-  while (qntdAtual <= botoesCPU.length) {
+  let errou = false;
+
+  while ((qntdAtual <= botoesCPU.length) && (errou != true)) {
     iniciarVezCPU(qntdAtual);
 
     iniciarVezPlayer();
+
+    let cont = botoesPlayer.length - 1;
+
+    if (botoesPlayer[cont] != botoesCPU[cont]) {
+      iniciarAnimacaoErro();
+
+      retirarClicavel();
+
+      reiniciarParametros();
+
+      botoesPlayer = [];
+      botoesCPU = [];
+
+      errou = true;
+    } else {
+      acender(botao);
+
+      setTimeout(() => {
+        apagar(botao);
+      }, 190);
+
+      if (verficarVitoria(botoesCPU, botoesPlayer) == true) {
+        retirarClicavel();
+
+        iniciarAnimacao();
+
+        numAcessos += 1;
+        velocidade += 50;
+
+        botoesPlayer = [];
+        botoesCPU = [];
+
+        setTimeout(() => {
+          iniciarRodada(numAcessos, velocidade);
+        }, 2000);
+      }
+    }
 
     qntdAtual++;
   }
@@ -56,7 +95,7 @@ function apagar(elemento) {
 async function iniciarVezCPU(qntdAtual) {
   for (let i = 0; i < qntdAtual; i++) {
     let index = botoesCPU[i];
-    
+
     acender(botoes[index]);
 
     await esperar(velocidade);
@@ -82,49 +121,11 @@ function iniciarVezPlayer() {
 
 botoes.forEach((botao, index) => {
   botao.addEventListener("click", () => {
-
     if (!podeJogar) {
       return;
     }
 
     botoesPlayer.push(index);
-
-    let cont = botoesPlayer.length - 1;
-
-    if (botoesPlayer[cont] != botoesCPU[cont]) {
-      iniciarAnimacaoErro();
-
-      retirarClicavel();
-
-      reiniciarParametros();
-
-      botoesPlayer = [];
-      botoesCPU = [];
-
-      //Fim de jogo aqui
-    } else {
-      acender(botao);
-
-      setTimeout(() => {
-        apagar(botao);
-      }, 190);
-
-      if (verficarVitoria(botoesCPU, botoesPlayer) == true) {
-        retirarClicavel();
-
-        iniciarAnimacao();
-
-        numAcessos += 1;
-        velocidade += 50;
-
-        botoesPlayer = [];
-        botoesCPU = [];
-
-        setTimeout(() => {
-          iniciarRodada(numAcessos, velocidade);
-        }, 2000);
-      }
-    }
   });
 });
 
