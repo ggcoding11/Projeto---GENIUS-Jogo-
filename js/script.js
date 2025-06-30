@@ -23,56 +23,58 @@ botaoIniciar.addEventListener("click", () => {
   }, 2000);
 });
 
-function iniciarRodada(numAcessos, velocidade) {
+async function iniciarRodada(numAcessos, velocidade) {
   gerarSequenciaCPU(); //Gerei os que serão acessos
 
   let qntdAtual = 1;
 
   let errou = false;
 
-  while ((qntdAtual <= botoesCPU.length) && (errou != true)) {
-    iniciarVezCPU(qntdAtual);
+  while (qntdAtual <= botoesCPU.length && errou != true) {
+    await iniciarVezCPU(qntdAtual);
 
-    iniciarVezPlayer();
+    await iniciarVezPlayer();
+    //Parei aqui, continue depois!!
+
 
     let cont = botoesPlayer.length - 1;
 
-    if (botoesPlayer[cont] != botoesCPU[cont]) {
-      iniciarAnimacaoErro();
-
-      retirarClicavel();
-
-      reiniciarParametros();
-
-      botoesPlayer = [];
-      botoesCPU = [];
-
-      errou = true;
-    } else {
-      acender(botao);
+    if (botoesPlayer[cont] == botoesCPU[cont]) {
+      acender(botoesPlayer[cont]);
 
       setTimeout(() => {
-        apagar(botao);
+        apagar(botoesPlayer[cont]);
       }, 190);
 
-      if (verficarVitoria(botoesCPU, botoesPlayer) == true) {
-        retirarClicavel();
-
-        iniciarAnimacao();
-
-        numAcessos += 1;
-        velocidade += 50;
-
-        botoesPlayer = [];
-        botoesCPU = [];
-
-        setTimeout(() => {
-          iniciarRodada(numAcessos, velocidade);
-        }, 2000);
-      }
+      qntdAtual++;
+    } else {
+      errou = true;
     }
+  }
 
-    qntdAtual++;
+  if (errou == true) {
+    iniciarAnimacaoErro();
+
+    retirarClicavel();
+
+    reiniciarParametros();
+
+    botoesPlayer = [];
+    botoesCPU = [];
+  } else {
+    retirarClicavel();
+
+    iniciarAnimacao();
+
+    numAcessos += 1;
+    velocidade += 50;
+
+    botoesPlayer = [];
+    botoesCPU = [];
+
+    setTimeout(() => {
+      iniciarRodada(numAcessos, velocidade);
+    }, 2000);
   }
 }
 
