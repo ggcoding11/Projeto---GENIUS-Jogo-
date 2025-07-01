@@ -28,53 +28,10 @@ async function iniciarRodada(numAcessos, velocidade) {
 
   let qntdAtual = 1;
 
-  let errou = false;
+  let resultado = true;
 
-  while (qntdAtual <= botoesCPU.length && errou != true) {
+  while (qntdAtual <= botoesCPU.length && resultado != false) {
     await iniciarVezCPU(qntdAtual);
-
-    await iniciarVezPlayer();
-    //Parei aqui, continue depois!!
-
-
-    let cont = botoesPlayer.length - 1;
-
-    if (botoesPlayer[cont] == botoesCPU[cont]) {
-      acender(botoesPlayer[cont]);
-
-      setTimeout(() => {
-        apagar(botoesPlayer[cont]);
-      }, 190);
-
-      qntdAtual++;
-    } else {
-      errou = true;
-    }
-  }
-
-  if (errou == true) {
-    iniciarAnimacaoErro();
-
-    retirarClicavel();
-
-    reiniciarParametros();
-
-    botoesPlayer = [];
-    botoesCPU = [];
-  } else {
-    retirarClicavel();
-
-    iniciarAnimacao();
-
-    numAcessos += 1;
-    velocidade += 50;
-
-    botoesPlayer = [];
-    botoesCPU = [];
-
-    setTimeout(() => {
-      iniciarRodada(numAcessos, velocidade);
-    }, 2000);
   }
 }
 
@@ -115,21 +72,6 @@ function gerarSequenciaCPU() {
     botoesCPU.push(index);
   }
 }
-
-function iniciarVezPlayer() {
-  tornarClicavel();
-  podeJogar = true;
-}
-
-botoes.forEach((botao, index) => {
-  botao.addEventListener("click", () => {
-    if (!podeJogar) {
-      return;
-    }
-
-    botoesPlayer.push(index);
-  });
-});
 
 function tornarClicavel() {
   botoes.forEach((botao) => {
