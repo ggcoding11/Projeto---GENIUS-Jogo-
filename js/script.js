@@ -4,6 +4,10 @@ const topRight = document.querySelector(".top-right");
 const bottomLeft = document.querySelector(".bottom-left");
 const bottomRight = document.querySelector(".bottom-right");
 const botoes = document.querySelectorAll(".botao");
+const somRed = document.querySelector("#somRed");
+const somBlue = document.querySelector("#somBlue");
+const somGreen = document.querySelector("#somGreen");
+const somYellow = document.querySelector("#somYellow");
 
 let botoesCPU;
 let botoesPlayer;
@@ -74,7 +78,7 @@ function iniciarVezPlayer(qntdAtual) {
       botoesPlayer.push(index);
 
       if (botoesPlayer[posicao] == botoesCPU[posicao]) {
-        acender(botoes[index]);
+        acender(botoes[index], index);
 
         await esperar(200);
 
@@ -116,8 +120,17 @@ function esperar(ms) {
   });
 }
 
-function acender(elemento) {
+function acender(elemento, index) {
   elemento.classList.add("ligado");
+
+  const sons = [somGreen, somRed, somYellow, somBlue];
+
+  if (index != -1) {
+    const som = sons[index];
+
+    som.currentTime = 0;
+    som.play();
+  }
 }
 
 function apagar(elemento) {
@@ -128,7 +141,7 @@ async function iniciarVezCPU(qntdAtual, velocidade) {
   for (let i = 0; i < qntdAtual; i++) {
     let index = botoesCPU[i];
 
-    acender(botoes[index]);
+    acender(botoes[index], index);
 
     await esperar(velocidade);
 
@@ -162,10 +175,10 @@ function retirarClicavel() {
 
 async function iniciarAnimacao() {
   for (let i = 0; i < 6; i++) {
-    acender(topLeft);
-    acender(topRight);
-    acender(bottomLeft);
-    acender(bottomRight);
+    acender(topLeft, -1);
+    acender(topRight, -1);
+    acender(bottomLeft, -1);
+    acender(bottomRight, -1);
 
     await esperar(100);
 
@@ -180,10 +193,10 @@ async function iniciarAnimacao() {
 
 async function iniciarAnimacaoErro() {
   for (let i = 0; i < 2; i++) {
-    acender(topLeft);
-    acender(topRight);
-    acender(bottomLeft);
-    acender(bottomRight);
+    acender(topLeft, -1);
+    acender(topRight, -1);
+    acender(bottomLeft, -1);
+    acender(bottomRight, -1);
 
     await esperar(400);
 
