@@ -8,11 +8,20 @@ const botoes = document.querySelectorAll(".botao");
 let botoesCPU;
 let botoesPlayer;
 
+let inicioJogo = false;
+let podeJogar = false;
+
 botaoIniciar.addEventListener("click", () => {
+  if (inicioJogo) {
+    return;
+  }
+
+  inicioJogo = true;
+
   iniciarAnimacao();
 
   let numAcessos = 5;
-  let velocidade = 500;
+  let velocidade = 400;
 
   setTimeout(() => {
     iniciarRodada(numAcessos, velocidade);
@@ -35,22 +44,29 @@ async function iniciarRodada(numAcessos, velocidade) {
   }
 
   if (resultado == true) {
-    iniciarAnimacao();
+    await iniciarAnimacao();
 
     await esperar(2000);
-    
+
     iniciarRodada(numAcessos + 1, velocidade - 70);
   } else {
-    iniciarAnimacaoErro();
+    await iniciarAnimacaoErro();
+
+    inicioJogo = false;
   }
 }
 
 function iniciarVezPlayer(qntdAtual) {
   return new Promise((resolve) => {
     tornarClicavel();
+    podeJogar = true;
     botoesPlayer = [];
 
     async function tratarClique(event) {
+      if (!podeJogar) {
+        return;
+      }
+
       let index = Array.from(botoes).indexOf(event.currentTarget);
 
       let posicao = botoesPlayer.length;
@@ -66,6 +82,7 @@ function iniciarVezPlayer(qntdAtual) {
 
         if (botoesPlayer.length == qntdAtual) {
           retirarClicavel();
+          podeJogar = false;
           removerEvento();
 
           await esperar(800);
@@ -73,6 +90,7 @@ function iniciarVezPlayer(qntdAtual) {
         }
       } else {
         retirarClicavel();
+        podeJogar = false;
         removerEvento();
         resolve(false);
       }
