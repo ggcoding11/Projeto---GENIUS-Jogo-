@@ -11,21 +11,21 @@ let botoesPlayer;
 let inicioJogo = false;
 let podeJogar = false;
 
-botaoIniciar.addEventListener("click", () => {
+botaoIniciar.addEventListener("click", async () => {
   if (inicioJogo) {
     return;
   }
 
   inicioJogo = true;
 
-  iniciarAnimacao();
+  await iniciarAnimacao();
 
   let numAcessos = 5;
   let velocidade = 400;
 
-  setTimeout(() => {
-    iniciarRodada(numAcessos, velocidade);
-  }, 2000);
+  await esperar(1000);
+
+  iniciarRodada(numAcessos, velocidade);
 });
 
 async function iniciarRodada(numAcessos, velocidade) {
@@ -48,7 +48,7 @@ async function iniciarRodada(numAcessos, velocidade) {
 
     await esperar(2000);
 
-    iniciarRodada(numAcessos + 1, velocidade - 70);
+    iniciarRodada(numAcessos + 2, Math.max(velocidade - 30, 150));
   } else {
     await iniciarAnimacaoErro();
 
