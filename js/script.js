@@ -5,18 +5,14 @@ const bottomLeft = document.querySelector(".bottom-left");
 const bottomRight = document.querySelector(".bottom-right");
 const botoes = document.querySelectorAll(".botao");
 
-let podeJogar = false;
-
-let numAcessos = 5;
-let velocidade = 500;
-
-let botoesCPU = [];
-let botoesPlayer = [];
-
-//Início do jogo aqui
+let botoesCPU;
+let botoesPlayer;
 
 botaoIniciar.addEventListener("click", () => {
   iniciarAnimacao();
+
+  let numAcessos = 5;
+  let velocidade = 500;
 
   setTimeout(() => {
     iniciarRodada(numAcessos, velocidade);
@@ -24,15 +20,74 @@ botaoIniciar.addEventListener("click", () => {
 });
 
 async function iniciarRodada(numAcessos, velocidade) {
-  gerarSequenciaCPU(); //Gerei os que serão acessos
+  gerarSequenciaCPU(numAcessos);
 
   let qntdAtual = 1;
 
   let resultado = true;
 
   while (qntdAtual <= botoesCPU.length && resultado != false) {
-    await iniciarVezCPU(qntdAtual);
+    await iniciarVezCPU(qntdAtual, velocidade);
+
+    resultado = await iniciarVezPlayer(qntdAtual);
+
+    qntdAtual++;
   }
+
+  if (resultado == true) {
+    iniciarAnimacao();
+
+    await esperar(2000);
+    
+    iniciarRodada(numAcessos + 1, velocidade - 70);
+  } else {
+    iniciarAnimacaoErro();
+  }
+}
+
+function iniciarVezPlayer(qntdAtual) {
+  return new Promise((resolve) => {
+    tornarClicavel();
+    botoesPlayer = [];
+
+    async function tratarClique(event) {
+      let index = Array.from(botoes).indexOf(event.currentTarget);
+
+      let posicao = botoesPlayer.length;
+
+      botoesPlayer.push(index);
+
+      if (botoesPlayer[posicao] == botoesCPU[posicao]) {
+        acender(botoes[index]);
+
+        await esperar(200);
+
+        apagar(botoes[index]);
+
+        if (botoesPlayer.length == qntdAtual) {
+          retirarClicavel();
+          removerEvento();
+
+          await esperar(800);
+          resolve(true);
+        }
+      } else {
+        retirarClicavel();
+        removerEvento();
+        resolve(false);
+      }
+    }
+
+    function removerEvento() {
+      botoes.forEach((botao) => {
+        botao.removeEventListener("click", tratarClique);
+      });
+    }
+
+    botoes.forEach((botao) => {
+      botao.addEventListener("click", tratarClique);
+    });
+  });
 }
 
 function esperar(ms) {
@@ -51,7 +106,7 @@ function apagar(elemento) {
   elemento.classList.remove("ligado");
 }
 
-async function iniciarVezCPU(qntdAtual) {
+async function iniciarVezCPU(qntdAtual, velocidade) {
   for (let i = 0; i < qntdAtual; i++) {
     let index = botoesCPU[i];
 
@@ -65,7 +120,9 @@ async function iniciarVezCPU(qntdAtual) {
   }
 }
 
-function gerarSequenciaCPU() {
+function gerarSequenciaCPU(numAcessos) {
+  botoesCPU = [];
+
   for (let i = 0; i < numAcessos; i++) {
     let index = Math.floor(Math.random() * 4);
 
@@ -119,23 +176,4 @@ async function iniciarAnimacaoErro() {
 
     await esperar(400);
   }
-}
-
-function verficarVitoria(array1, array2) {
-  if (array1.length != array2.length) {
-    return false;
-  }
-
-  for (let i = 0; i < array1.length; i++) {
-    if (array1[i] != array2[i]) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-function reiniciarParametros() {
-  numAcessos = 5;
-  velocidade = 300;
 }
